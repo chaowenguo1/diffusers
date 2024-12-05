@@ -136,6 +136,7 @@ class OobleckDecoderBlock(nn.Module):
 
     def forward(self, hidden_state):
         hidden_state = self.snake1(hidden_state)
+        print(hidden_state)
         hidden_state = self.conv_t1(hidden_state)
         hidden_state = self.res_unit1(hidden_state)
         hidden_state = self.res_unit2(hidden_state)
