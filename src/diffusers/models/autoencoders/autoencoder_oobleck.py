@@ -80,7 +80,7 @@ class OobleckResidualUnit(nn.Module):
                 Input tensor after passing through the residual unit.
         """
         output_tensor = hidden_state
-        print(output_tensor)
+        print(output_tensor, self.snake1(output_tensor))
         output_tensor = self.conv1(self.snake1(output_tensor))
         output_tensor = self.conv2(self.snake2(output_tensor))
 
