@@ -428,6 +428,7 @@ class AutoencoderOobleck(ModelMixin, ConfigMixin):
             decoded_slices = [self._decode(z_slice).sample for z_slice in z.split(1)]
             decoded = torch.cat(decoded_slices)
         else:
+            print(z)
             decoded = self._decode(z).sample
 
         if not return_dict:
