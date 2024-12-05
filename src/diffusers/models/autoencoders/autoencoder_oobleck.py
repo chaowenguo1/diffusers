@@ -80,8 +80,8 @@ class OobleckResidualUnit(nn.Module):
                 Input tensor after passing through the residual unit.
         """
         output_tensor = hidden_state
-        output_tensor = self.conv1(self.snake1(output_tensor))
-        output_tensor = self.conv2(self.snake2(output_tensor))
+        output_tensor = self.conv1(self.snake1(output_tensor)).to(output_tensor.dtype)
+        output_tensor = self.conv2(self.snake2(output_tensor)).to(output_tensor.dtype)
 
         padding = (hidden_state.shape[-1] - output_tensor.shape[-1]) // 2
         if padding > 0:
