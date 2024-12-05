@@ -80,6 +80,7 @@ class OobleckResidualUnit(nn.Module):
                 Input tensor after passing through the residual unit.
         """
         output_tensor = hidden_state
+        print(output_tensor)
         output_tensor = self.conv1(self.snake1(output_tensor))
         output_tensor = self.conv2(self.snake2(output_tensor))
 
@@ -283,6 +284,7 @@ class OobleckDecoder(nn.Module):
         hidden_state = self.conv1(hidden_state)
 
         for layer in self.block:
+            print(hidden_state)
             hidden_state = layer(hidden_state)
 
         hidden_state = self.snake1(hidden_state)
@@ -399,6 +401,7 @@ class AutoencoderOobleck(ModelMixin, ConfigMixin):
         return AutoencoderOobleckOutput(latent_dist=posterior)
 
     def _decode(self, z: torch.Tensor, return_dict: bool = True) -> Union[OobleckDecoderOutput, torch.Tensor]:
+        print(z)
         dec = self.decoder(z)
 
         if not return_dict:
