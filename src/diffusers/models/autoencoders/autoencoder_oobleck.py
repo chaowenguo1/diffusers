@@ -135,9 +135,7 @@ class OobleckDecoderBlock(nn.Module):
 
     def forward(self, hidden_state):
         hidden_state = self.snake1(hidden_state)
-        print(hidden_state)
         hidden_state = self.conv_t1(hidden_state).to(hidden_state.dtype)
-        print(hidden_state)
         hidden_state = self.res_unit1(hidden_state)
         hidden_state = self.res_unit2(hidden_state)
         hidden_state = self.res_unit3(hidden_state)
@@ -285,7 +283,6 @@ class OobleckDecoder(nn.Module):
         hidden_state = self.conv1(hidden_state)
 
         for layer in self.block:
-            print(hidden_state)
             hidden_state = layer(hidden_state)
 
         hidden_state = self.snake1(hidden_state)
@@ -402,7 +399,6 @@ class AutoencoderOobleck(ModelMixin, ConfigMixin):
         return AutoencoderOobleckOutput(latent_dist=posterior)
 
     def _decode(self, z: torch.Tensor, return_dict: bool = True) -> Union[OobleckDecoderOutput, torch.Tensor]:
-        print(z)
         dec = self.decoder(z)
 
         if not return_dict:
@@ -432,7 +428,6 @@ class AutoencoderOobleck(ModelMixin, ConfigMixin):
             decoded_slices = [self._decode(z_slice).sample for z_slice in z.split(1)]
             decoded = torch.cat(decoded_slices)
         else:
-            print(z)
             decoded = self._decode(z).sample
 
         if not return_dict:
