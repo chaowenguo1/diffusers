@@ -80,8 +80,8 @@ class OobleckResidualUnit(nn.Module):
                 Input tensor after passing through the residual unit.
         """
         output_tensor = hidden_state
-        output_tensor = self.conv1(self.snake1(output_tensor)).to(output_tensor.dtype)
-        output_tensor = self.conv2(self.snake2(output_tensor)).to(output_tensor.dtype)
+        output_tensor = self.conv1(self.snake1(output_tensor)).to(hidden_state.dtype)
+        output_tensor = self.conv2(self.snake2(output_tensor)).to(hidden_state.dtype)
 
         padding = (hidden_state.shape[-1] - output_tensor.shape[-1]) // 2
         if padding > 0:
@@ -108,7 +108,7 @@ class OobleckEncoderBlock(nn.Module):
         hidden_state = self.res_unit1(hidden_state)
         hidden_state = self.res_unit2(hidden_state)
         hidden_state = self.snake1(self.res_unit3(hidden_state))
-        hidden_state = self.conv1(hidden_state)
+        hidden_state = self.conv1(hidden_state).to(hidden_state.dtype)
 
         return hidden_state
 
@@ -240,13 +240,13 @@ class OobleckEncoder(nn.Module):
         self.conv2 = weight_norm(nn.Conv1d(d_model, encoder_hidden_size, kernel_size=3, padding=1))
 
     def forward(self, hidden_state):
-        hidden_state = self.conv1(hidden_state)
+        hidden_state = self.conv1(hidden_state).to(hidden_state.dtype)
 
         for module in self.block:
             hidden_state = module(hidden_state)
 
         hidden_state = self.snake1(hidden_state)
-        hidden_state = self.conv2(hidden_state)
+        hidden_state = self.conv2(hidden_state).to(hidden_state.dtype)
 
         return hidden_state
 
@@ -280,13 +280,13 @@ class OobleckDecoder(nn.Module):
         self.conv2 = weight_norm(nn.Conv1d(channels, audio_channels, kernel_size=7, padding=3, bias=False))
 
     def forward(self, hidden_state):
-        hidden_state = self.conv1(hidden_state)
+        hidden_state = self.conv1(hidden_state).to(hidden_state.dtype)
 
         for layer in self.block:
             hidden_state = layer(hidden_state)
 
         hidden_state = self.snake1(hidden_state)
-        hidden_state = self.conv2(hidden_state)
+        hidden_state = self.conv2(hidden_state).to(hidden_state.dtype)
 
         return hidden_state
 
